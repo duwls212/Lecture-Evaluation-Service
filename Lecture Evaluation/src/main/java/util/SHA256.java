@@ -8,6 +8,15 @@ public class SHA256 {
 		StringBuffer result = new StringBuffer();
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] salt = "Hello! This is Salt.".getBytes();	// SHA256 적용시 해킹 확률이 증가, 따라서 salt 적용이 일반적
+			digest.reset();
+			digest.update(salt);
+			byte[] chars = digest.digest(input.getBytes("UTF-8"));
+			for(int i = 0; i < chars.length; i++) {
+				String hex = Integer.toHexString(0xff & chars[i]);
+				if(hex.length() == 1) result.append("0");
+				result.append(hex);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
